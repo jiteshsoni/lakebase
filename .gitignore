@@ -19,6 +19,11 @@ reports/
 *_comparison_report_*.txt
 *_comparison_report_*.md
 
+# Database files - Test databases and patterns
+*.db
+test_*_pattern.db
+data/test_*.db
+
 # Python
 __pycache__/
 *.pyc
