@@ -1,0 +1,41 @@
+{
+  "databricks": {
+    "username": "your_username@domain.com",
+    "oauth_token": "REPLACE_WITH_YOUR_OAUTH_TOKEN_FROM_DATABRICKS_UI"
+  },
+  "lakebase": {
+    "host": "your-lakebase-host.staging.cloud.databricks.com",
+    "port": 443,
+    "database": "your_database"
+  },
+  "benchmark": {
+    "thread_counts": [1, 4, 8, 16, 32, 64, 128, 200, 300],
+    "test_duration_seconds": 30,
+    "table_rows": 1000000,
+    "batch_size": 10000,
+    "table_name": "benchmark_test",
+    "connection_stagger_delay": 0.05,
+    "max_pool_init_time": 30,
+    "use_connection_pooling": true
+  },
+  "_comments": {
+    "connection_stagger_delay": "Delay in seconds between each connection creation to avoid OAuth rate limits",
+    "max_pool_init_time": "Maximum time in seconds to spend initializing connection pool",
+    "use_connection_pooling": "Enable/disable centralized connection pooling (applies to lakebase_benchmark.py)",
+    "rate_limiting_features": [
+      "Centralized connection pooling module (lakebase_connection_pool.py)",
+      "Staggered connection pool initialization with configurable delays",
+      "Exponential backoff with jitter for OAuth rate limit errors", 
+      "Gradual worker startup in batches to avoid pool exhaustion",
+      "Connection pooling to reuse authenticated connections",
+      "Lazy connection creation - pools are only created when needed",
+      "Automatic retry logic for rate-limited authentication requests",
+      "Both benchmark scripts use the same pooling implementation"
+    ],
+    "tuning_recommendations": {
+      "connection_stagger_delay": "Increase to 0.2-0.5s if still hitting rate limits with many connections",
+      "max_pool_init_time": "Increase if you need larger connection pools and have slow OAuth responses",
+      "thread_counts": "Start with smaller thread counts and gradually increase to find optimal concurrency"
+    }
+  }
+}
