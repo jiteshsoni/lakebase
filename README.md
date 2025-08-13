@@ -337,6 +337,11 @@ export LOG_LEVEL=DEBUG
 python lakebase_1m_benchmark.py
 ```
 
+## ⚠️ Important Notes
+
+- **Use at your own risk** - This toolkit is provided as-is without warranties
+- **Benchmark for your own use-case** - Performance results may vary based on your specific environment, data, and configuration
+
 ## 📄 License
 
 This project is for internal use at Databricks.
