@@ -19,10 +19,10 @@ lakebase/
 ├── requirements.txt                    # Dependencies
 ├── .gitignore                         # Git ignore rules
 ├── .env                               # Secure credentials (gitignored)
-├── .env.template                      # Template for credentials
-├── lakebase_credentials.conf.example  # Legacy config example
 ├── lakebase_1m_benchmark.py          # Benchmark compatibility wrapper
 ├── async_database_wrapper.py          # Async database compatibility wrapper
+├── FASTAPI_INTEGRATION_GUIDE.md       # FastAPI integration guide
+├── NIKHIL_WEBSITE_GUIDE.md            # Website integration guide
 │
 ├── src/                               # Main source code
 │   ├── core/                          # Core functionality
@@ -41,16 +41,21 @@ lakebase/
 │
 ├── scripts/                           # Executable scripts
 │   ├── benchmark.py                   # Main benchmark script
-│   ├── setup.py                       # Setup script
-│   ├── config_helper.py               # Configuration helper
-│   ├── update_token.py                # Token update script
-│   └── setup_secure_env.py            # Secure environment setup
+│   ├── setup_secure_env.py            # Secure environment setup
+│   └── test_lakebase_only.py          # Lakebase-only testing
 │
 ├── tests/                             # Test files
+│   ├── test_lakebase_only.py          # Lakebase testing
+│   └── test_mysql_vs_lakebase.py      # MySQL vs Lakebase comparison
+│
 ├── examples/                          # Example implementations
-├── docs/                              # Documentation
-├── config/                            # Configuration examples
-└── data/                              # Data files
+│   ├── demo_results.py                # Demo results
+│   ├── enhanced_benchmark_example.py  # Enhanced benchmarking
+│   └── test_comparison_simple.py      # Simple comparison test
+│
+└── config/                            # Configuration examples
+    ├── production_config_example.json # Production config template
+    └── rate_limiting_config_example.json # Rate limiting config
 ```
 
 ## 🔐 Secure Credential Management
@@ -137,6 +142,8 @@ async def root(db = Depends(get_db)):
     return {"message": "Hello World"}
 ```
 
+
+
 ## 📊 Benchmarking
 
 The benchmark script tests Lakebase performance with:
@@ -145,6 +152,7 @@ The benchmark script tests Lakebase performance with:
 - **Multi-threaded concurrent queries** (20-300 threads)
 - **Connection pooling** with OAuth rate limiting mitigation
 - **Comprehensive metrics** (throughput, latency, error rates)
+
 
 ### Benchmark Configuration
 
@@ -165,9 +173,11 @@ python lakebase_1m_benchmark.py
 # Run specific test
 python tests/test_mysql_vs_lakebase.py
 
-# Run comprehensive tests
-python tests/comprehensive_test.py
+# Run Lakebase-only tests
+python tests/test_lakebase_only.py
 ```
+
+
 
 ## 🔧 Database Connection Features
 
@@ -193,16 +203,20 @@ pool_recycle = 3000              # Pool recycle interval
 ### Run All Tests
 
 ```bash
-python tests/comprehensive_test.py
+# Run Lakebase-only tests
+python tests/test_lakebase_only.py
+
+# Run MySQL vs Lakebase comparison
+python tests/test_mysql_vs_lakebase.py
 ```
 
 ### Test Categories
 
-- ✅ **Dependencies** - All required packages
+- ✅ **Lakebase Connection** - Database connectivity tests
+- ✅ **MySQL vs Lakebase** - Performance comparison tests
 - ✅ **Configuration** - Secure credential validation
-- ✅ **Benchmark** - Performance testing
-- ✅ **Async Database** - Connection management
-- ✅ **Async Functionality** - Async operations
+- ✅ **Benchmark** - Performance testing with various thread counts
+- ✅ **Async Database** - Connection management and pooling
 
 ## 📈 Performance Features
 
@@ -273,12 +287,14 @@ async def get_users(db = Depends(get_db)):
 ### Custom Benchmark
 
 ```python
-from scripts.benchmark import Lakebase1MBenchmark
+# Run the main benchmark script
+python scripts/benchmark.py
 
-benchmark = Lakebase1MBenchmark()
-benchmark.thread_counts = [10, 20, 50]  # Custom thread counts
-benchmark.test_duration = 60            # 60 seconds per test
-benchmark.run_full_benchmark()
+# Or use the wrapper
+python lakebase_1m_benchmark.py
+
+# Test examples
+python examples/enhanced_benchmark_example.py
 ```
 
 ### Secure Environment Setup
